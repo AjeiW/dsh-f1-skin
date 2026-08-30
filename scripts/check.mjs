@@ -2,7 +2,7 @@
 // Usage: node scripts/check.mjs
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import * as data from "../src/teams.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -82,6 +82,36 @@ if (!existsSync(bundlePath)) {
   const sizeKB = Math.round(bundle.length / 1024);
   ok(`lib/client.js is ${sizeKB} KB`);
   if (sizeKB > 3200) fail(`bundle over 3.2 MB (${sizeKB} KB) — compress the images`);
+}
+
+// ── bundle smoke test: register + materialize the factory in bare Node ──
+{
+  let registration = null;
+  globalThis.window = { __ModuleLoader__: { load: (reg) => { registration = reg; } } };
+  try {
+    await import(pathToFileURL(bundlePath).href + `?smoke=${Date.now()}`);
+  } finally {
+    delete globalThis.window;
+  }
+  if (registration === null) fail("bundle did not call window.__ModuleLoader__.load");
+  else if (registration.id !== "dsh-f1-skin") fail(`registration id mismatch: ${registration.id}`);
+  else {
+    ok("bundle registered with correct id");
+    let ex = null;
+    try {
+      ex = registration.factory((spec) => {
+        throw new Error(`unexpected external require("${spec}") — the skin must be self-contained`);
+      });
+    } catch (e) {
+      fail(`factory materialization threw: ${e.message}`);
+    }
+    if (ex !== null) {
+      if (Array.isArray(ex.inject) && ex.inject.includes("theme")) ok("client plugin injects \"theme\"");
+      else fail(`inject must include "theme", got ${JSON.stringify(ex.inject)}`);
+      if (typeof ex.apply === "function") ok("client plugin exports apply()");
+      else fail("client plugin is missing apply()");
+    }
+  }
 }
 
 if (failures > 0) {
