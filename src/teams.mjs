@@ -149,7 +149,7 @@ export function buildPalette({ base, brand, biz }, mode) {
 
 /** Token → palette key, or a function (palette) → CSS color value. */
 export const TOKEN_MAP = {
-  "--dsw-alias-bg-base": (c) => alpha(c.base, 0.88),
+  "--dsw-alias-bg-base": (c) => alpha(c.base, 0.76),
   "--dsw-alias-bg-layer-1": "layer1",
   "--dsw-alias-bg-layer-2": "layer2",
   "--dsw-alias-bg-layer-3": "layer3",
@@ -227,7 +227,7 @@ export const TOKEN_MAP = {
   "--dsw-alias-state-warn-tertiary": (c) => alpha(c.warn, 0.1),
   "--dsw-alias-toast-bg": (c) => alpha(c.overlay, 0.96),
   "--dsw-alias-tooltip-bg": (c) => alpha(c.overlay, 0.96),
-  "--dsw-specific-sidebar-fill": (c) => alpha(c.base, 0.82)
+  "--dsw-specific-sidebar-fill": (c) => alpha(c.base, 0.66)
 };
 
 /** Build the {token: {light, dark}} override layer for one team. */
@@ -291,46 +291,28 @@ export const TEAMS = [
 export const F1_CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600;700;900&display=swap');
 
-/* ── cockpit backdrop: fixed layer behind the app canvas ── */
+/* ── cockpit backdrop: painted inside body's own background stack ──
+   (a negative-z-index overlay layer would sit UNDER body's background,
+   which the shell paints with --dsw-alias-bg-base — so the image lives
+   in the body background layers instead: tint → readability gradient →
+   cockpit image → base color) */
 html { background-color: #0B0B10; }
 html[data-f1-dark="false"] { background-color: #F4F5F8; }
-#dsh-f1-cockpit {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  transition: opacity .45s ease;
-}
-#dsh-f1-cockpit::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%);
-  mix-blend-mode: color;
-  opacity: .55;
-}
-#dsh-f1-cockpit::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(10,10,14,.8), rgba(10,10,14,.5) 30%, rgba(10,10,14,.68) 72%, rgba(10,10,14,.92));
-}
-html[data-f1-dark="false"] #dsh-f1-cockpit {
-  filter: brightness(1.5) saturate(.5);
-  opacity: .45;
-}
-html[data-f1-dark="false"] #dsh-f1-cockpit::after {
-  background: linear-gradient(to bottom, rgba(244,246,250,.82), rgba(244,246,250,.66) 30%, rgba(244,246,250,.82) 72%, rgba(244,246,250,.95));
-}
-
-/* ── carbon-fiber weave over the translucent base ── */
 body {
-  background-image:
+  background:
+    radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%),
     repeating-linear-gradient(45deg, rgba(255,255,255,.014) 0 1px, transparent 1px 7px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,.01) 0 1px, transparent 1px 7px);
+    repeating-linear-gradient(-45deg, rgba(255,255,255,.01) 0 1px, transparent 1px 7px),
+    linear-gradient(to bottom, rgba(10,10,14,.5), rgba(10,10,14,.28) 30%, rgba(10,10,14,.44) 72%, rgba(10,10,14,.72)),
+    var(--f1-cockpit, none) center / cover no-repeat fixed,
+    var(--dsw-alias-bg-base, #0B0B10);
+}
+html[data-f1-dark="false"] body {
+  background:
+    radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%),
+    linear-gradient(to bottom, rgba(244,246,250,.6), rgba(244,246,250,.45) 30%, rgba(244,246,250,.62) 72%, rgba(244,246,250,.88)),
+    var(--f1-cockpit, none) center / cover no-repeat fixed,
+    var(--dsw-alias-bg-base, #F4F5F8);
 }
 
 /* ── checkered-flag top strip ── */
@@ -395,7 +377,6 @@ html[data-f1-dark="false"] #dsh-f1-rail {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #dsh-f1-cockpit { transition: none; }
   #dsh-f1-rail .f1-dot { transition: none; }
 }
 `;

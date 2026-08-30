@@ -4,7 +4,6 @@
     const SOURCE = "dsh-f1-skin";
     const STORE_KEY = "dsh-f1-skin:team";
 
-    let cockpitEl = null;
     let railEl = null;
     let tokenDisposer = null;
     let lastTeamId = null;
@@ -35,48 +34,20 @@
       }, "dsh-f1-skin: dark-mode sync");
     }
 
-    function applyTeam(theme, team, opts) {
+    function applyTeam(theme, team) {
       if (lastTeamId === team.id && tokenDisposer) return tokenDisposer;
       lastTeamId = team.id;
       tokenDisposer = theme.overrideTokens(SOURCE, makeTeamTokens(team));
       const root = document.documentElement;
-      const swap = () => {
-        root.style.setProperty("--f1-accent", team.dark.brand);
-        root.style.setProperty("--f1-accent-light", team.light.brand);
-        root.style.setProperty("--f1-tint", team.tint);
-        if (cockpitEl) cockpitEl.style.backgroundImage = `url("${team.cockpit}")`;
-        try {
-          localStorage.setItem(STORE_KEY, team.id);
-        } catch { /* private mode — keep in-memory */ }
-        if (railEl) for (const dot of railEl.querySelectorAll(".f1-dot")) dot.classList.toggle("active", dot.dataset.team === team.id);
-      };
-      if (cockpitEl && opts && opts.fade !== false) {
-        const reduced = typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
-        if (!reduced) {
-          cockpitEl.style.opacity = "0";
-          setTimeout(() => {
-            swap();
-            cockpitEl.style.opacity = "";
-          }, 160);
-          return tokenDisposer;
-        }
-      }
-      swap();
+      root.style.setProperty("--f1-accent", team.dark.brand);
+      root.style.setProperty("--f1-accent-light", team.light.brand);
+      root.style.setProperty("--f1-tint", team.tint);
+      root.style.setProperty("--f1-cockpit", `url("${team.cockpit}")`);
+      try {
+        localStorage.setItem(STORE_KEY, team.id);
+      } catch { /* private mode — keep in-memory */ }
+      if (railEl) for (const dot of railEl.querySelectorAll(".f1-dot")) dot.classList.toggle("active", dot.dataset.team === team.id);
       return tokenDisposer;
-    }
-
-    function installCockpit(ctx) {
-      ctx.effect(() => {
-        const el = document.createElement("div");
-        el.id = "dsh-f1-cockpit";
-        el.setAttribute("aria-hidden", "true");
-        document.body.appendChild(el);
-        cockpitEl = el;
-        return () => {
-          el.remove();
-          cockpitEl = null;
-        };
-      }, "dsh-f1-skin: cockpit backdrop");
     }
 
     function installRail(ctx, theme) {
@@ -93,7 +64,7 @@
           dot.title = `F1 · ${team.name}`;
           dot.setAttribute("aria-label", team.name);
           dot.style.background = team.dark.brand;
-          dot.addEventListener("click", () => applyTeam(theme, team, { fade: true }));
+          dot.addEventListener("click", () => applyTeam(theme, team));
           rail.appendChild(dot);
         }
         document.body.appendChild(rail);
@@ -121,10 +92,9 @@
     function apply(ctx) {
       const theme = ctx.get("theme");
       installCss(ctx);
-      installCockpit(ctx);
       installRail(ctx, theme);
       syncDarkMode(ctx);
-      applyTeam(theme, findTeam(readStoredTeam()), { fade: false });
+      applyTeam(theme, findTeam(readStoredTeam()));
       ctx.on("dispose", () => {
         if (tokenDisposer) tokenDisposer();
       });
