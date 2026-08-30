@@ -149,7 +149,7 @@ export function buildPalette({ base, brand, biz }, mode) {
 
 /** Token → palette key, or a function (palette) → CSS color value. */
 export const TOKEN_MAP = {
-  "--dsw-alias-bg-base": (c) => alpha(c.base, 0.76),
+  "--dsw-alias-bg-base": (c) => alpha(c.base, 0.55),
   "--dsw-alias-bg-layer-1": "layer1",
   "--dsw-alias-bg-layer-2": "layer2",
   "--dsw-alias-bg-layer-3": "layer3",
@@ -227,7 +227,7 @@ export const TOKEN_MAP = {
   "--dsw-alias-state-warn-tertiary": (c) => alpha(c.warn, 0.1),
   "--dsw-alias-toast-bg": (c) => alpha(c.overlay, 0.96),
   "--dsw-alias-tooltip-bg": (c) => alpha(c.overlay, 0.96),
-  "--dsw-specific-sidebar-fill": (c) => alpha(c.base, 0.66)
+  "--dsw-specific-sidebar-fill": (c) => alpha(c.base, 0.5)
 };
 
 /** Build the {token: {light, dark}} override layer for one team. */
@@ -303,14 +303,14 @@ body {
     radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%),
     repeating-linear-gradient(45deg, rgba(255,255,255,.014) 0 1px, transparent 1px 7px),
     repeating-linear-gradient(-45deg, rgba(255,255,255,.01) 0 1px, transparent 1px 7px),
-    linear-gradient(to bottom, rgba(10,10,14,.5), rgba(10,10,14,.28) 30%, rgba(10,10,14,.44) 72%, rgba(10,10,14,.72)),
+    linear-gradient(to bottom, rgba(10,10,14,.34), rgba(10,10,14,.16) 30%, rgba(10,10,14,.28) 72%, rgba(10,10,14,.5)),
     var(--f1-cockpit, none) center / cover no-repeat fixed,
     var(--dsw-alias-bg-base, #0B0B10);
 }
 html[data-f1-dark="false"] body {
   background:
     radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%),
-    linear-gradient(to bottom, rgba(244,246,250,.6), rgba(244,246,250,.45) 30%, rgba(244,246,250,.62) 72%, rgba(244,246,250,.88)),
+    linear-gradient(to bottom, rgba(244,246,250,.42), rgba(244,246,250,.28) 30%, rgba(244,246,250,.44) 72%, rgba(244,246,250,.72)),
     var(--f1-cockpit, none) center / cover no-repeat fixed,
     var(--dsw-alias-bg-base, #F4F5F8);
 }
