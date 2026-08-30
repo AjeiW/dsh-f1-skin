@@ -149,7 +149,7 @@ export function buildPalette({ base, brand, biz }, mode) {
 
 /** Token → palette key, or a function (palette) → CSS color value. */
 export const TOKEN_MAP = {
-  "--dsw-alias-bg-base": (c) => alpha(c.base, 0.55),
+  "--dsw-alias-bg-base": (c) => alpha(c.base, 0.72),
   "--dsw-alias-bg-layer-1": "layer1",
   "--dsw-alias-bg-layer-2": "layer2",
   "--dsw-alias-bg-layer-3": "layer3",
@@ -227,7 +227,7 @@ export const TOKEN_MAP = {
   "--dsw-alias-state-warn-tertiary": (c) => alpha(c.warn, 0.1),
   "--dsw-alias-toast-bg": (c) => alpha(c.overlay, 0.96),
   "--dsw-alias-tooltip-bg": (c) => alpha(c.overlay, 0.96),
-  "--dsw-specific-sidebar-fill": (c) => alpha(c.base, 0.5)
+  "--dsw-specific-sidebar-fill": (c) => alpha(c.base, 0.55)
 };
 
 /** Build the {token: {light, dark}} override layer for one team. */
@@ -294,8 +294,11 @@ export const F1_CSS = `
 /* ── cockpit backdrop: painted inside body's own background stack ──
    (a negative-z-index overlay layer would sit UNDER body's background,
    which the shell paints with --dsw-alias-bg-base — so the image lives
-   in the body background layers instead: tint → readability gradient →
-   cockpit image → base color) */
+   in the body background layers instead: tint → carbon weave → mild
+   vignette → cockpit image → base color).
+   The layout frame repaints --dsw-alias-bg-base full-viewport and would
+   double-dim the image; it is fully covered by the three columns, so we
+   drop its background and let each column carry its own single scrim. */
 html { background-color: #0B0B10; }
 html[data-f1-dark="false"] { background-color: #F4F5F8; }
 body {
@@ -303,16 +306,24 @@ body {
     radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%),
     repeating-linear-gradient(45deg, rgba(255,255,255,.014) 0 1px, transparent 1px 7px),
     repeating-linear-gradient(-45deg, rgba(255,255,255,.01) 0 1px, transparent 1px 7px),
-    linear-gradient(to bottom, rgba(10,10,14,.34), rgba(10,10,14,.16) 30%, rgba(10,10,14,.28) 72%, rgba(10,10,14,.5)),
+    linear-gradient(to bottom, rgba(10,10,14,.2), rgba(10,10,14,.1) 30%, rgba(10,10,14,.16) 72%, rgba(10,10,14,.3)),
     var(--f1-cockpit, none) center / cover no-repeat fixed,
     var(--dsw-alias-bg-base, #0B0B10);
 }
 html[data-f1-dark="false"] body {
   background:
     radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%),
-    linear-gradient(to bottom, rgba(244,246,250,.42), rgba(244,246,250,.28) 30%, rgba(244,246,250,.44) 72%, rgba(244,246,250,.72)),
+    linear-gradient(to bottom, rgba(244,246,250,.2), rgba(244,246,250,.12) 30%, rgba(244,246,250,.18) 72%, rgba(244,246,250,.4)),
     var(--f1-cockpit, none) center / cover no-repeat fixed,
     var(--dsw-alias-bg-base, #F4F5F8);
+}
+/* version-tied selector (DSH web 0.1.1-rc.2 ui-layout): the full-viewport
+   frame background is redundant with the columns' own fills — removing it
+   lets the cockpit show through a single scrim instead of two. If this
+   selector stops matching after a DSH upgrade, the skin degrades to the
+   double-dimmed look instead of breaking. */
+.pI_x6G_frame {
+  background: transparent;
 }
 
 /* ── checkered-flag top strip ── */
