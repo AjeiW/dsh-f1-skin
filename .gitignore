@@ -1,0 +1,4 @@
+# raw downloads & exploration scratch — the compressed *.jpg are the
+# embedded assets; the -raw originals stay local for re-compression only.
+assets/cockpits/*-raw.*
+assets/cockpit-candidates.jsonl

@@ -1,0 +1,6 @@
+# dsh-f1-skin bundle patch — mount the F1 four-team skin as one dsh.client row.
+# The row id is the plugin's entry id; `name` is the package (dual-face:
+# "." is the node half, "./client" the browser bundle).
+- insert:
+    - id: ui-f1-skin
+      name: 'dsh-f1-skin'
