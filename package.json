@@ -1,8 +1,13 @@
 {
   "name": "dsh-f1-skin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "F1 Race Control themed skin for the DeepSeek Harness Web UI — Red Bull / Ferrari / McLaren / Mercedes team themes with broadcast photo backdrops, native settings panel, dark & light.",
   "license": "MIT",
+  "author": "frank-fan-818",
+  "homepage": "https://github.com/frank-fan-818/dsh-f1-skin#readme",
+  "bugs": {
+    "url": "https://github.com/frank-fan-818/dsh-f1-skin/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frank-fan-818/dsh-f1-skin.git"
@@ -16,14 +21,18 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "lib/index.js",
-    "lib/client.js",
-    "cordis.patch.yml"
+    "lib/",
+    "cordis.patch.yml",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
-    "prepublishOnly": "npm run build && npm run check"
+    "release:check": "node scripts/release-check.mjs",
+    "quality": "npm run build && npm run check && npm run release:check",
+    "test:e2e": "playwright test",
+    "test:e2e:update": "playwright test --update-snapshots",
+    "prepublishOnly": "npm run quality"
   },
   "keywords": [
     "deepseek-harness",
@@ -35,6 +44,15 @@
     "f1",
     "web"
   ],
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  },
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"

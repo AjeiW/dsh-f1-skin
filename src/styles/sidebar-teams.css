@@ -32,6 +32,23 @@
 .hHd-Xa_logoRow > * { position: relative; z-index: 1; }
 .hHd-Xa_logoRow::before { display: none; }
 
+/* DSH removes the wide DeepSeek/HARNESS SVG when the navigation becomes a
+   56px rail. Preserve the requested HARNESS identity as a tiny vertical
+   scrutineering mark without adding a clickable layer or widening the host. */
+.hHd-Xa_root.hHd-Xa_collapsed .hHd-Xa_logoRow::after {
+  content: "HARNESS";
+  position: absolute;
+  z-index: 2;
+  top: 7px;
+  right: 3px;
+  writing-mode: vertical-rl;
+  font: 700 6px/1 "Arial Narrow", "Roboto Condensed", sans-serif;
+  letter-spacing: .08em;
+  color: var(--f1-text-2);
+  opacity: .88;
+  pointer-events: none;
+}
+
 /* The HARNESS wordmark is part of DSH's native brand-name SVG. Preserve the
    complete 156px viewBox in every expanded team/theme state: no shrinking,
    clipping, recolouring, or opacity inherited from decorative treatments. */

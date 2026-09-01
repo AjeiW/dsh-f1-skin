@@ -10,6 +10,8 @@ const STYLE_FILES = [
   "foundation.css", "background.css", "materials.css", "components.css", "sidebar-teams.css",
   "controls.css", "teams.css", "responsive.css"
 ];
+const MAX_BUNDLE_BYTES = 2_800_000;
+const MAX_PHOTO_BYTES = 700_000;
 let failures = 0;
 const fail = (msg) => { console.error("✗ " + msg); failures += 1; };
 const ok = (msg) => console.log("✓ " + msg);
@@ -87,6 +89,12 @@ for (const team of data.TEAMS) {
   else ok(`${team.id}: 79 × {light, dark} valid color values`);
   if (team.cockpit !== null && typeof team.cockpit === "string") fail(`${team.id}: cockpit should be null in src (filled at build)`);
   if (team.logo !== null && typeof team.logo === "string") fail(`${team.id}: logo should be null in src (filled at build)`);
+  const photoPath = join(root, "assets", "cockpits", `${team.id}-broadcast.jpg`);
+  if (!existsSync(photoPath)) fail(`${team.id}: broadcast photograph is missing`);
+  else if (statSync(photoPath).size > MAX_PHOTO_BYTES) fail(`${team.id}: photograph exceeds ${MAX_PHOTO_BYTES} bytes`);
+}
+if (data.TEAMS.every((team) => existsSync(join(root, "assets", "cockpits", `${team.id}-broadcast.jpg`)))) {
+  ok(`all broadcast photographs stay within ${Math.round(MAX_PHOTO_BYTES / 1000)} KB each`);
 }
 
 // ── CSS sanity ──
@@ -129,8 +137,12 @@ if (!css.includes(".YDXeBa_sessionRow.YDXeBa_selected") || !css.includes(".hHd-X
 else ok("sidebar has host-safe team decoration");
 if (!css.includes(".wSkVaW_titleCluster::after") || !css.includes("RACE CONTROL") || !css.includes("pointer-events: none")) fail("conversation header lacks a noninteractive team signature");
 else ok("conversation header includes a noninteractive team signature");
+if (!css.includes(".wSkVaW_heroWorkspaceRow") || !css.includes("var(--f1-panel) 92%")) fail("hero workspace controls lack a readable local surface");
+else ok("hero workspace and preset controls have a readable local surface");
 if (!css.includes(".hHd-Xa_brandName svg") || !css.includes("width: 156px !important") || !css.includes("visibility: visible !important") || !css.includes("svg > rect + g path")) fail("native HARNESS wordmark lacks size or contrast guarantees");
 else ok("native HARNESS wordmark keeps its full viewBox and inverted contrast");
+if (!css.includes(".hHd-Xa_root.hHd-Xa_collapsed .hHd-Xa_logoRow::after") || !css.includes('content: "HARNESS"') || !css.includes("writing-mode: vertical-rl")) fail("collapsed navigation loses the HARNESS identity");
+else ok("collapsed navigation preserves a noninteractive HARNESS mark");
 if (css.includes("repeating-linear-gradient")) fail("generic repeating stripe pattern returned");
 else ok("sidebar avoids generic repeating stripe patterns");
 if (css.includes(".hHd-Xa_brand::after") || css.includes(".qDHVXG_sectionHeader::after") || !css.includes(".hHd-Xa_regionArea::after")) fail("team identity overlaps a host brand or workspace control");
@@ -195,10 +207,7 @@ if (!existsSync(bundlePath)) {
     join(root, "src", "plugin-fragment.js"),
     join(root, "scripts", "build.mjs"),
     ...STYLE_FILES.map((file) => join(root, "src", "styles", file)),
-    ...data.TEAMS.map((team) => {
-      const broadcast = join(root, "assets", "cockpits", `${team.id}-broadcast.jpg`);
-      return existsSync(broadcast) ? broadcast : join(root, "assets", "cockpits", `${team.id}.jpg`);
-    }),
+    ...data.TEAMS.map((team) => join(root, "assets", "cockpits", `${team.id}-broadcast.jpg`)),
     ...data.TEAMS.map((team) => join(root, "assets", "team-logos", `${team.id}.svg`))
   ];
   const newestInput = Math.max(...buildInputs.map((file) => statSync(file).mtimeMs));
@@ -219,7 +228,7 @@ if (!existsSync(bundlePath)) {
   if (!bundle.includes('id: "dsh-f1-skin"')) fail("bundle id is not dsh-f1-skin");
   else ok("bundle id correct");
   const images = (bundle.match(/data:image\/[a-z+]+;base64,/g) || []).length;
-  if (images < 8) fail(`expected 8 embedded image assets, found ${images}`);
+  if (images !== 8) fail(`expected exactly 8 embedded image assets, found ${images}`);
   else ok(`${images} embedded image assets (4 photos + 4 logos)`);
   if (bundle.includes("cockpit\": null")) fail("a cockpit image was not embedded");
   else ok("no unembedded cockpit placeholders");
@@ -232,9 +241,10 @@ if (!existsSync(bundlePath)) {
   else fail("bundle lacks native F1 settings markers");
   if (bundle.includes('dsh-f1-skin:photo') && bundle.includes('dsh-f1-skin:surface')) ok("bundle includes persistent visual controls");
   else fail("bundle lacks persistent visual controls");
-  const sizeKB = Math.round(bundle.length / 1024);
+  const sizeBytes = statSync(bundlePath).size;
+  const sizeKB = Math.round(sizeBytes / 1024);
   ok(`lib/client.js is ${sizeKB} KB`);
-  if (sizeKB > 3200) fail(`bundle over 3.2 MB (${sizeKB} KB) — compress the images`);
+  if (sizeBytes > MAX_BUNDLE_BYTES) fail(`bundle exceeds ${MAX_BUNDLE_BYTES} bytes (${sizeKB} KB) — compress the images`);
 }
 
 // ── bundle smoke test: register + materialize the factory in bare Node ──

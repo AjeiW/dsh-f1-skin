@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Quality / Node ${{ matrix.node }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22, 24]
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run quality
+
+  browser:
+    name: DSH browser regression
+    runs-on: ubuntu-latest
+    env:
+      DSH_HOME: ${{ runner.temp }}/dsh-home
+      DSH_URL: http://127.0.0.1:3080
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - name: Install pinned DSH test host
+        run: |
+          npm install --global pnpm@10.15.0
+          npm install --prefix "$RUNNER_TEMP/dsh-runner" @deepseek-ai/dsh@0.1.1-rc.2
+          node "$RUNNER_TEMP/dsh-runner/node_modules/@deepseek-ai/dsh/lib/bin.js" plugin --profile web add "link:$GITHUB_WORKSPACE"
+      - name: Start DSH Web
+        run: |
+          node "$RUNNER_TEMP/dsh-runner/node_modules/@deepseek-ai/dsh/lib/bin.js" web --no-open --host 127.0.0.1 --port 3080 > "$RUNNER_TEMP/dsh.log" 2>&1 &
+          for attempt in {1..60}; do
+            if curl --fail --silent "$DSH_URL" > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          cat "$RUNNER_TEMP/dsh.log"
+          exit 1
+      - run: npm run test:e2e
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsh-f1-visual-regression
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: warn
+          retention-days: 14
+      - name: Print DSH log on failure
+        if: failure()
+        run: cat "$RUNNER_TEMP/dsh.log"

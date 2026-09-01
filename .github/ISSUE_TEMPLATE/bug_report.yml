@@ -1,0 +1,66 @@
+name: Bug report
+description: Report a visual or functional regression in dsh-f1-skin
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping keep the skin functional. Please remove private conversation content from screenshots.
+  - type: input
+    id: skin-version
+    attributes:
+      label: Skin version
+      placeholder: 0.3.0
+    validations:
+      required: true
+  - type: input
+    id: dsh-version
+    attributes:
+      label: DeepSeek Harness version
+      placeholder: 0.1.1-rc.2
+    validations:
+      required: true
+  - type: dropdown
+    id: team
+    attributes:
+      label: Team theme
+      options:
+        - Oracle Red Bull Racing
+        - Scuderia Ferrari
+        - McLaren Racing
+        - Mercedes-AMG Petronas Formula One Team
+        - All themes
+    validations:
+      required: true
+  - type: dropdown
+    id: appearance
+    attributes:
+      label: Appearance
+      options: [Light, Dark, Follow system]
+    validations:
+      required: true
+  - type: input
+    id: viewport
+    attributes:
+      label: Window size and display scale
+      placeholder: 1440 × 960 at 100%
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      placeholder: Tell us exactly what you clicked and what appeared.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Drag in a cropped screenshot with private content removed.

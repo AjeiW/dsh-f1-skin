@@ -73,6 +73,19 @@ html[data-f1-team="ferrari"] .wSkVaW_titleCluster::after { content: "SCUDERIA FE
 html[data-f1-team="mclaren"] .wSkVaW_titleCluster::after { content: "McLAREN RACING\A RACE CONTROL"; }
 html[data-f1-team="mercedes"] .wSkVaW_titleCluster::after { content: "MERCEDES-AMG PETRONAS\A RACE CONTROL"; font-size: 8px; }
 
+/* The native workspace + preset controls sit directly over the hero photo.
+   Give that one functional row a compact local plate so the labels remain
+   readable over dark bodywork, bright asphalt, and every team composition. */
+.wSkVaW_heroWorkspaceRow {
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  padding: 4px 10px;
+  border: 1px solid color-mix(in srgb, var(--f1-line) 76%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--f1-panel) 92%, transparent);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .08);
+}
+
 html[data-f1-team="ferrari"] .wSkVaW_titleCluster::before {
   width: 30px;
   height: 30px;

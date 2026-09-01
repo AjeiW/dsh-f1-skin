@@ -29,15 +29,13 @@ const MIME = {
 };
 
 function loadCockpit(id) {
-  for (const stem of [`${id}-broadcast`, id]) {
-    for (const ext of COCKPIT_EXTS) {
-      try {
-        const buf = readFileSync(join(root, "assets", "cockpits", stem + ext));
-        return `data:${MIME[ext]};base64,${buf.toString("base64")}`;
-      } catch { /* try the next extension */ }
-    }
+  for (const ext of COCKPIT_EXTS) {
+    try {
+      const buf = readFileSync(join(root, "assets", "cockpits", `${id}-broadcast${ext}`));
+      return `data:${MIME[ext]};base64,${buf.toString("base64")}`;
+    } catch { /* try the next extension */ }
   }
-  throw new Error(`dsh-f1-skin build: no cockpit asset for team "${id}"`);
+  throw new Error(`dsh-f1-skin build: no broadcast asset for team "${id}"`);
 }
 
 function loadTeamLogo(id) {
