@@ -1,6 +1,14 @@
 # dsh-f1-skin 🏁
 
-F1 Race Control Workspace —— DeepSeek Harness Web UI 的四车队设计系统皮肤。
+*An F1 Race Control themed skin for the DeepSeek Harness Web UI.*
+
+> **dsh-f1-skin 是给 DeepSeek Harness Web UI 写的一台「赛事控制中心」。**
+>
+> 它把 F1 的转播美学带进你的 AI 工作台：红牛、法拉利、迈凯伦、梅奔四支车队的完整主题，一键切换——每队拥有独立的品牌色、对比度文本、车队性格和专属赛车摄影背景，并完整跟随 DSH 的浅色 / 深色 / 跟随系统三档主题。
+>
+> 与普通换肤不同，它按「设计系统」而非「样式覆盖」来工作：背景场景、阅读材质、工作组件、真实运行状态、车队 DNA 被拆成五个独立层级——照片只负责气氛，文字可读性由局部材质保证，界面运行状态直接映射 DSH 真实的 `data-state`，**不做虚假的 LIVE 播报，也不遮挡任何宿主功能**。所有控制（车队选择、背景强度、文字衬底、模糊、动效）都住在 DSH 官方的「设置 → Formula One 车队」面板里，卸载即恢复原样。
+
+仓库：[github.com/frank-fan-818/dsh-f1-skin](https://github.com/frank-fan-818/dsh-f1-skin)
 
 四套车队主题（红牛 / 法拉利 / 迈凯伦 / 梅奔），每队使用对应的 2024 F1 赛车动态摄影背景。皮肤把背景场景、阅读材质、工作组件、真实运行状态和车队性格拆成独立层级，并继续跟随 DSH 的浅色 / 深色 / 跟随系统三档。
 
@@ -31,7 +39,7 @@ dsh plugin --profile web add dsh-f1-skin
 ### 方式二：GitHub 仓库
 
 ```bash
-dsh plugin --profile web add github:<owner>/dsh-f1-skin
+dsh plugin --profile web add github:frank-fan-818/dsh-f1-skin
 ```
 
 > 仓库已提交构建产物 `lib/client.js`，无需安装步骤里的 build 脚本。

@@ -3,6 +3,10 @@
   "version": "0.2.0",
   "description": "F1 Race Control themed skin for the DeepSeek Harness Web UI — Red Bull / Ferrari / McLaren / Mercedes team themes with broadcast photo backdrops, native settings panel, dark & light.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frank-fan-818/dsh-f1-skin.git"
+  },
   "type": "module",
   "main": "lib/index.js",
   "exports": {
