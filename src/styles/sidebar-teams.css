@@ -1,0 +1,319 @@
+/* Team-specific sidebar identities. No generic chequered flags, dotted rails,
+   or simulated telemetry: every shape belongs to the selected team's language.
+   Never create a stacking context on sidebar ancestors because DSH mounts its
+   fixed settings overlay below this subtree. */
+
+.hHd-Xa_root { position: relative; }
+
+.hHd-Xa_root::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  z-index: 8;
+  width: 4px;
+  pointer-events: none;
+  background: var(--f1-accent);
+  box-shadow: 1px 0 0 color-mix(in srgb, var(--f1-accent) 24%, transparent);
+}
+
+.hHd-Xa_logoRow {
+  position: relative;
+  box-sizing: border-box;
+  height: 54px;
+  margin-top: 6px;
+  padding: 5px 10px 5px 6px;
+  overflow: visible;
+  border: 1px solid color-mix(in srgb, var(--f1-muted) 22%, var(--dsw-alias-border-l2));
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--f1-panel-2) 98%, transparent);
+  box-shadow: 0 7px 18px rgba(0,0,0,.08);
+}
+
+.hHd-Xa_logoRow > * { position: relative; z-index: 1; }
+.hHd-Xa_logoRow::before { display: none; }
+
+/* The HARNESS wordmark is part of DSH's native brand-name SVG. Preserve the
+   complete 156px viewBox in every expanded team/theme state: no shrinking,
+   clipping, recolouring, or opacity inherited from decorative treatments. */
+.hHd-Xa_root:not(.hHd-Xa_collapsed) .hHd-Xa_brand.hHd-Xa_wide {
+  width: 202px;
+  min-width: 202px;
+  flex: 0 0 202px;
+  overflow: visible;
+}
+
+.hHd-Xa_root:not(.hHd-Xa_collapsed) .hHd-Xa_brandIdentity {
+  width: 188px;
+  min-width: 188px;
+  flex: 0 0 188px;
+  overflow: visible;
+}
+
+.hHd-Xa_root:not(.hHd-Xa_collapsed) .hHd-Xa_brandName {
+  display: inline-flex !important;
+  width: 156px !important;
+  min-width: 156px;
+  height: 24px;
+  flex: 0 0 156px;
+  overflow: visible !important;
+  visibility: visible !important;
+  color: var(--dsw-alias-label-primary) !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.hHd-Xa_root:not(.hHd-Xa_collapsed) .hHd-Xa_brandName svg {
+  display: block !important;
+  width: 156px !important;
+  min-width: 156px;
+  max-width: none !important;
+  height: 24px !important;
+  overflow: visible !important;
+  visibility: visible !important;
+  color: inherit !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* DSH draws HARNESS as the final SVG group on a currentColor badge. Its
+   inverted-label token can follow a team accent, producing dark-on-dark text;
+   bind those letter paths to the actual panel surface instead. */
+.hHd-Xa_root:not(.hHd-Xa_collapsed) .hHd-Xa_brandName svg > rect + g path {
+  fill: var(--f1-panel-2) !important;
+}
+
+.hHd-Xa_newSession {
+  position: relative;
+  border-radius: 3px;
+  border-color: color-mix(in srgb, var(--f1-accent) 48%, var(--dsw-alias-border-l1));
+  background: color-mix(in srgb, var(--f1-panel-2) 96%, transparent);
+  box-shadow: inset 4px 0 0 var(--f1-accent), 0 7px 18px rgba(0,0,0,.08);
+}
+
+.hHd-Xa_newSession::after {
+  content: "PIT ENTRY";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: var(--f1-accent-text);
+  font: 700 9px/1 var(--f1-font-display);
+  letter-spacing: .1em;
+  opacity: .78;
+}
+
+.hHd-Xa_regionArea {
+  position: relative;
+  margin-top: 4px;
+  overflow: hidden;
+  border-top: 1px solid color-mix(in srgb, var(--f1-accent) 24%, transparent);
+  background: color-mix(in srgb, var(--f1-panel) 82%, transparent);
+}
+
+.hHd-Xa_regionArea::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  bottom: 40px;
+  width: 82px;
+  height: 82px;
+  pointer-events: none;
+  user-select: none;
+  opacity: .15;
+  background: var(--f1-team-logo) center / contain no-repeat;
+  filter: brightness(0) saturate(0);
+}
+
+.hHd-Xa_regionArea::after {
+  content: "FORMULA ONE TEAM";
+  position: absolute;
+  right: 14px;
+  bottom: 62px;
+  left: 112px;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+  color: var(--f1-text);
+  font: 800 12px/1.18 var(--f1-font-display);
+  letter-spacing: .09em;
+  text-align: left;
+  text-transform: uppercase;
+  white-space: pre-line;
+  opacity: .17;
+}
+
+html[data-f1-dark="true"] .hHd-Xa_regionArea::before {
+  filter: brightness(0) invert(1) saturate(0);
+  opacity: .18;
+}
+
+html[data-f1-dark="true"] .hHd-Xa_regionArea::after { opacity: .19; }
+
+.qDHVXG_root { position: relative; z-index: 1; }
+
+.qDHVXG_sectionHeader {
+  position: relative;
+  margin-bottom: 3px;
+  border-bottom: 1px solid color-mix(in srgb, var(--f1-accent) 26%, transparent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--f1-accent) 11%, var(--f1-panel-2)), transparent 74%);
+}
+
+.qDHVXG_sectionLabel {
+  color: var(--f1-accent-text);
+  font-family: var(--f1-font-display);
+  font-weight: 700;
+  letter-spacing: .035em;
+}
+
+.YDXeBa_projectRow,
+.YDXeBa_sessionRow {
+  position: relative;
+  box-sizing: border-box;
+  border-radius: 3px;
+  transition: background-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.YDXeBa_projectRow {
+  background: color-mix(in srgb, var(--f1-panel-2) 74%, transparent);
+  box-shadow: inset 2px 0 0 color-mix(in srgb, var(--f1-accent) 38%, transparent);
+}
+
+.YDXeBa_projectRow:hover,
+.YDXeBa_sessionRow:hover { transform: translateX(2px); }
+
+.YDXeBa_sessionRow::after {
+  content: "";
+  position: absolute;
+  right: 9px;
+  bottom: 0;
+  left: 9px;
+  height: 1px;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--f1-accent) 26%, transparent);
+}
+
+.YDXeBa_sessionRow.YDXeBa_selected {
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--f1-accent) 18%, var(--f1-panel-2)),
+    color-mix(in srgb, var(--f1-panel-2) 91%, transparent));
+  box-shadow: inset 4px 0 0 var(--f1-accent), 0 5px 15px rgba(0,0,0,.08);
+}
+
+.YDXeBa_sessionRow.YDXeBa_selected::after {
+  height: 2px;
+  opacity: .9;
+  background: var(--f1-accent);
+}
+
+.hHd-Xa_footArea {
+  position: relative;
+  padding-top: 7px;
+  border-top: 1px solid color-mix(in srgb, var(--f1-accent) 30%, transparent);
+  background: color-mix(in srgb, var(--f1-panel-2) 96%, transparent);
+}
+
+.hHd-Xa_footArea::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 12px;
+  width: 76px;
+  height: 3px;
+  background: var(--f1-accent);
+}
+
+.VOzbGW_trigger { position: relative; border-radius: 3px; }
+
+.VOzbGW_trigger::after {
+  content: "RACE CONTROL";
+  position: absolute;
+  right: 10px;
+  color: var(--f1-muted);
+  font: 600 9px/1 var(--f1-font-display);
+  letter-spacing: .1em;
+  opacity: .72;
+}
+
+/* Red Bull: energetic navy control tower, yellow datum, red attack wedge. */
+html[data-f1-team="redbull"] .pI_x6G_sidebarCol {
+  background: linear-gradient(150deg, rgba(255,200,0,.08) 0 16%, transparent 16%), color-mix(in srgb, #10182e 94%, transparent);
+}
+html[data-f1-team="redbull"] .hHd-Xa_root::before { background: linear-gradient(180deg, #ffc800 0 72%, #d90f0f 72%); }
+html[data-f1-team="redbull"] .hHd-Xa_logoRow { background: color-mix(in srgb, var(--f1-panel-2) 98%, transparent); }
+html[data-f1-team="redbull"] .hHd-Xa_regionArea::before {
+  left: 18px;
+  bottom: 44px;
+  width: 96px;
+  height: 58px;
+}
+html[data-f1-team="redbull"] .hHd-Xa_regionArea::after {
+  content: "ORACLE RED BULL\A RACING";
+  bottom: 54px;
+}
+
+/* Ferrari: disciplined Rosso Corsa field, gold coachline, shield emphasis. */
+html[data-f1-team="ferrari"] .pI_x6G_sidebarCol {
+  background: radial-gradient(circle at 88% 78%, rgba(255,242,0,.09), transparent 25%), color-mix(in srgb, #f7f2f0 94%, transparent);
+}
+html[data-f1-team="ferrari"] .hHd-Xa_root::before { background: #dc0000; box-shadow: 2px 0 0 rgba(255,242,0,.42); }
+html[data-f1-team="ferrari"] .hHd-Xa_logoRow { background: color-mix(in srgb, var(--f1-panel-2) 98%, transparent); }
+html[data-f1-team="ferrari"] .hHd-Xa_footArea::before { background: #dc0000; }
+html[data-f1-team="ferrari"] .hHd-Xa_regionArea::before {
+  left: 34px;
+  bottom: 30px;
+  width: 68px;
+  height: 92px;
+  filter: none;
+  opacity: .24;
+}
+html[data-f1-team="ferrari"] .hHd-Xa_regionArea::after {
+  content: "SCUDERIA\A FERRARI";
+  bottom: 56px;
+}
+
+/* McLaren: papaya speed surface with one clean black aerodynamic slice. */
+html[data-f1-team="mclaren"] .pI_x6G_sidebarCol {
+  background: linear-gradient(154deg, rgba(255,128,0,.11) 0 18%, transparent 18%), color-mix(in srgb, #f6f5f2 95%, transparent);
+}
+html[data-f1-team="mclaren"] .hHd-Xa_root::before { background: #ff8000; }
+html[data-f1-team="mclaren"] .hHd-Xa_logoRow { background: color-mix(in srgb, var(--f1-panel-2) 98%, transparent); }
+html[data-f1-team="mclaren"] .hHd-Xa_regionArea::before {
+  left: 22px;
+  bottom: 48px;
+  width: 88px;
+  height: 48px;
+}
+html[data-f1-team="mclaren"] .hHd-Xa_regionArea::after {
+  content: "McLAREN\A RACING";
+  bottom: 54px;
+}
+
+/* Mercedes: black/silver engineering plate with one PETRONAS datum. */
+html[data-f1-team="mercedes"] .pI_x6G_sidebarCol {
+  background: radial-gradient(circle at 90% 82%, rgba(0,210,190,.10), transparent 27%), color-mix(in srgb, #eef1f1 95%, transparent);
+}
+html[data-f1-team="mercedes"] .hHd-Xa_root::before { background: linear-gradient(180deg, #00d2be 0 76%, #777b80 76%); }
+html[data-f1-team="mercedes"] .hHd-Xa_logoRow { background: color-mix(in srgb, var(--f1-panel-2) 98%, transparent); }
+html[data-f1-team="mercedes"] .hHd-Xa_footArea::before { width: 108px; height: 2px; background: #00a89f; }
+html[data-f1-team="mercedes"] .hHd-Xa_regionArea::before {
+  left: 28px;
+  bottom: 36px;
+  width: 76px;
+  height: 76px;
+}
+html[data-f1-team="mercedes"] .hHd-Xa_regionArea::after {
+  content: "MERCEDES-AMG\A PETRONAS FORMULA ONE TEAM";
+  bottom: 51px;
+  left: 112px;
+  font-size: 10px;
+}
+
+html[data-f1-team="redbull"] .pI_x6G_frame::before { background: linear-gradient(90deg, #ffc800 0 62%, #d90f0f 62%); }
+html[data-f1-team="ferrari"] .pI_x6G_frame::before { background: linear-gradient(90deg, #dc0000 0 91%, #fff200 91%); }
+html[data-f1-team="mclaren"] .pI_x6G_frame::before { background: linear-gradient(90deg, #ff8000 0 84%, #17191f 84%); }
+html[data-f1-team="mercedes"] .pI_x6G_frame::before { background: linear-gradient(90deg, #17191d 0 68%, #00d2be 68% 92%, #b4b5b7 92%); }
+
+.hHd-Xa_root.hHd-Xa_collapsed .hHd-Xa_newSession::after,
+.hHd-Xa_root.hHd-Xa_collapsed .hHd-Xa_regionArea::before,
+.hHd-Xa_root.hHd-Xa_collapsed .hHd-Xa_regionArea::after,
+.hHd-Xa_root.hHd-Xa_collapsed .VOzbGW_trigger::after { display: none; }

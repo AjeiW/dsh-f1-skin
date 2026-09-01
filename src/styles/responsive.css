@@ -1,0 +1,53 @@
+@media (max-width: 760px) {
+  body::before { background-position: var(--f1-cockpit-mobile-position, center); }
+  .pXSMma_headline { padding: 8px 15px 9px 14px; }
+  .Sxvs8a_root { padding: 14px 15px; }
+  .Sxvs8a_root table th,
+  .Sxvs8a_root table td { padding: 10px 11px; }
+  .Sxvs8a_root table th:first-child,
+  .Sxvs8a_root table td:first-child { padding-left: 11px; }
+  .dsh-f1-settings__grid { grid-template-columns: 1fr; }
+  .dsh-f1-settings__header { flex-direction: column; }
+  .dsh-f1-settings__status { align-self: flex-start; }
+  .dsh-f1-setting {
+    grid-template-columns: minmax(92px, 1fr) minmax(110px, 1.5fr) 42px;
+    gap: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dsh-f1-settings__panel { padding: 12px; }
+  .dsh-f1-setting {
+    grid-template-columns: 1fr 44px;
+    padding-block: 8px;
+  }
+  .dsh-f1-setting input { grid-column: 1 / -1; grid-row: 2; }
+  .dsh-f1-setting output { grid-column: 2; grid-row: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { transition: none !important; animation: none !important; }
+}
+
+html[data-f1-motion="off"] body::before,
+html[data-f1-motion="off"] body::after { animation: none !important; transition: none !important; }
+
+html[data-f1-motion="off"] .YDXeBa_sessionRow.YDXeBa_selected::after {
+  animation: none !important;
+}
+
+html[data-f1-motion="off"] :where(
+  .QWLzlG_root[data-state="running"],
+  .o3BgMG_root[data-state="running"],
+  .CY-8Ka_root[data-state="running"]
+),
+html[data-f1-motion="off"] :where(
+  .QWLzlG_root[data-state="running"],
+  .o3BgMG_root[data-state="running"],
+  .CY-8Ka_root[data-state="running"]
+)::before,
+html[data-f1-motion="off"] :where(
+  .QWLzlG_root[data-state="running"] .QWLzlG_row,
+  .o3BgMG_root[data-state="running"] .o3BgMG_row,
+  .CY-8Ka_root[data-state="running"]
+)::after { animation: none !important; transition: none !important; }

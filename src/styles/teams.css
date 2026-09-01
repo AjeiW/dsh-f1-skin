@@ -1,0 +1,16 @@
+html[data-f1-team="redbull"] {
+  --f1-grid-size: 44px;
+  --f1-card-radius: 3px 10px 3px 6px;
+}
+html[data-f1-team="ferrari"] {
+  --f1-grid-size: 52px;
+  --f1-card-radius: 3px;
+}
+html[data-f1-team="mclaren"] {
+  --f1-grid-size: 58px;
+  --f1-card-radius: 3px 12px;
+}
+html[data-f1-team="mercedes"] {
+  --f1-grid-size: 32px;
+  --f1-card-radius: 2px;
+}

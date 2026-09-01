@@ -1,0 +1,87 @@
+/* Never apply filter/backdrop-filter to DSH layout ancestors: settings and
+   menus use fixed overlays mounted below them, and filters would trap those
+   overlays inside a new containing block. */
+.pI_x6G_sidebarCol,
+.hHd-Xa_root { background: transparent; }
+.pI_x6G_sidebarCol {
+  background: color-mix(in srgb, var(--f1-panel) 96%, transparent);
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: color-mix(in srgb, var(--f1-accent) 28%, transparent);
+  box-shadow: 10px 0 34px rgba(0,0,0,.10);
+}
+
+/* DSH settings panel stays visually solid while retaining its native geometry
+   and fixed-overlay behavior. This prevents bright hero cards showing through. */
+.VOzbGW_panel {
+  background: color-mix(in srgb, var(--f1-panel) 98%, transparent);
+  box-shadow: 0 24px 70px rgba(0,0,0,.24);
+}
+
+/* Conversation stays open; only its working header and composer become material. */
+.wSkVaW_root { background: transparent; }
+.wSkVaW_header {
+  background: linear-gradient(180deg,
+    color-mix(in srgb, var(--f1-panel) 97%, transparent),
+    color-mix(in srgb, var(--f1-panel) 96%, transparent));
+}
+.wSkVaW_header::after { background: var(--f1-line); }
+
+/* A compact team signature occupies the otherwise empty title-bar lane. It is
+   decorative only and stays clear of title actions and the Session log button. */
+.wSkVaW_titleCluster { position: relative; }
+
+.wSkVaW_titleCluster::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 180px;
+  width: 44px;
+  height: 26px;
+  pointer-events: none;
+  background: var(--f1-team-logo) center / contain no-repeat;
+  filter: brightness(0) saturate(0);
+  opacity: .42;
+  transform: translateY(-50%);
+}
+
+.wSkVaW_titleCluster::after {
+  content: "FORMULA ONE TEAM\A RACE CONTROL";
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  width: 150px;
+  padding-left: 11px;
+  border-left: 2px solid var(--f1-accent);
+  pointer-events: none;
+  color: var(--f1-text);
+  font: 750 9px/1.24 var(--f1-font-display);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: pre-line;
+  opacity: .64;
+  transform: translateY(-50%);
+}
+
+html[data-f1-dark="true"] .wSkVaW_titleCluster::before {
+  filter: brightness(0) invert(1) saturate(0);
+  opacity: .48;
+}
+
+html[data-f1-team="redbull"] .wSkVaW_titleCluster::after { content: "ORACLE RED BULL RACING\A RACE CONTROL"; }
+html[data-f1-team="ferrari"] .wSkVaW_titleCluster::after { content: "SCUDERIA FERRARI\A RACE CONTROL"; }
+html[data-f1-team="mclaren"] .wSkVaW_titleCluster::after { content: "McLAREN RACING\A RACE CONTROL"; }
+html[data-f1-team="mercedes"] .wSkVaW_titleCluster::after { content: "MERCEDES-AMG PETRONAS\A RACE CONTROL"; font-size: 8px; }
+
+html[data-f1-team="ferrari"] .wSkVaW_titleCluster::before {
+  width: 30px;
+  height: 30px;
+  right: 190px;
+  filter: none;
+  opacity: .48;
+}
+
+@media (max-width: 1080px) {
+  .wSkVaW_titleCluster::before,
+  .wSkVaW_titleCluster::after { display: none; }
+}

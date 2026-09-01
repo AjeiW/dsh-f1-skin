@@ -1,7 +1,7 @@
 {
   "name": "dsh-f1-skin",
-  "version": "0.1.0",
-  "description": "F1 four-team racing skin for the DeepSeek Harness Web UI — Red Bull / Ferrari / McLaren / Mercedes cockpit themes, dark & light, team switcher.",
+  "version": "0.2.0",
+  "description": "F1 Race Control themed skin for the DeepSeek Harness Web UI — Red Bull / Ferrari / McLaren / Mercedes team themes with broadcast photo backdrops, native settings panel, dark & light.",
   "license": "MIT",
   "type": "module",
   "main": "lib/index.js",
@@ -18,8 +18,19 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node scripts/check.mjs"
+    "check": "node scripts/check.mjs",
+    "prepublishOnly": "npm run build && npm run check"
   },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "skin",
+    "theme",
+    "formula-1",
+    "f1",
+    "web"
+  ],
   "dsh": {
     "bundle": {
       "patch": "./cordis.patch.yml"

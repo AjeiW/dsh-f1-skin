@@ -118,9 +118,9 @@ export function alpha(hex, a) {
 }
 
 /** Derive the full per-mode palette from a team's three seed colors. */
-export function buildPalette({ base, brand, biz }, mode) {
-  const lift = mode === "dark" ? lighten : darken; // surfaces step away from the base
+export function buildPalette({ base, brand, brandText = brand, biz, bizText = biz }, mode) {
   return {
+    mode,
     base,
     layer1: mode === "dark" ? lighten(base, 0.06) : mix(base, "#FFFFFF", 0.55),
     layer2: mode === "dark" ? lighten(base, 0.12) : mix(base, "#FFFFFF", 0.2),
@@ -134,12 +134,14 @@ export function buildPalette({ base, brand, biz }, mode) {
     border4: mode === "dark" ? lighten(base, 0.4) : mix(base, "#000000", 0.4),
     text: mode === "dark" ? "#F2F3F5" : "#17171C",
     text2: mode === "dark" ? "#B8BAC2" : "#4A4A52",
-    text3: mode === "dark" ? "#7A7C86" : "#8A8C94",
-    textDim: mode === "dark" ? "#565860" : "#A0A2AA",
+    text3: mode === "dark" ? "#9296A1" : "#5F626A",
+    textDim: mode === "dark" ? "#979CA8" : "#686C74",
     textInv: mode === "dark" ? "#0B0B10" : "#FFFFFF",
     brand,
+    brandText,
     brandHi: mode === "dark" ? lighten(brand, 0.14) : darken(brand, 0.1),
     biz,
+    bizText,
     bizHi: mode === "dark" ? lighten(biz, 0.12) : darken(biz, 0.1),
     success: mode === "dark" ? "#00E701" : "#00A844",
     warn: mode === "dark" ? "#FFD400" : "#B8860B",
@@ -149,19 +151,19 @@ export function buildPalette({ base, brand, biz }, mode) {
 
 /** Token → palette key, or a function (palette) → CSS color value. */
 export const TOKEN_MAP = {
-  "--dsw-alias-bg-base": (c) => alpha(c.base, 0.72),
-  "--dsw-alias-bg-layer-1": "layer1",
-  "--dsw-alias-bg-layer-2": "layer2",
-  "--dsw-alias-bg-layer-3": "layer3",
+  "--dsw-alias-bg-base": (c) => alpha(c.base, c.mode === "dark" ? 0.2 : 0.38),
+  "--dsw-alias-bg-layer-1": (c) => alpha(c.layer1, c.mode === "dark" ? 0.76 : 0.84),
+  "--dsw-alias-bg-layer-2": (c) => alpha(c.layer2, c.mode === "dark" ? 0.84 : 0.9),
+  "--dsw-alias-bg-layer-3": (c) => alpha(c.layer3, c.mode === "dark" ? 0.9 : 0.94),
   "--dsw-alias-bg-mask-1": () => "rgba(0, 0, 0, 0.24)",
   "--dsw-alias-bg-mask-2": () => "rgba(0, 0, 0, 0.4)",
   "--dsw-alias-bg-mask-3": () => "rgba(0, 0, 0, 0.56)",
   "--dsw-alias-bg-mask-drop": () => "rgba(0, 0, 0, 0.5)",
   "--dsw-alias-bg-mask-photo": () => "rgba(0, 0, 0, 0.32)",
-  "--dsw-alias-bg-module-platform": "platform",
+  "--dsw-alias-bg-module-platform": (c) => alpha(c.platform, c.mode === "dark" ? 0.8 : 0.88),
   "--dsw-alias-bg-multi-select": (c) => alpha(c.brand, 0.12),
-  "--dsw-alias-bg-overlay": "overlay",
-  "--dsw-alias-bg-skeleton": "skeleton",
+  "--dsw-alias-bg-overlay": (c) => alpha(c.overlay, 0.95),
+  "--dsw-alias-bg-skeleton": (c) => alpha(c.skeleton, 0.72),
   "--dsw-alias-border-inverted": (c) => alpha(c.textInv, 0.9),
   "--dsw-alias-border-inverted2": (c) => alpha(c.textInv, 0.55),
   "--dsw-alias-border-l1": "border1",
@@ -172,7 +174,7 @@ export const TOKEN_MAP = {
   "--dsw-alias-brand-primary": "brand",
   "--dsw-alias-brand-primary-invert": (c) => c.onBrand ?? c.textInv,
   "--dsw-alias-brand-primary-new-colorprimary-new-color": "brand",
-  "--dsw-alias-brand-text": "brand",
+  "--dsw-alias-brand-text": "brandText",
   "--dsw-alias-button-contrast-fill": "text",
   "--dsw-alias-button-elevated-fill": "layer2",
   "--dsw-alias-button-floating-fill": (c) => alpha(c.overlay, 0.92),
@@ -202,7 +204,7 @@ export const TOKEN_MAP = {
   "--dsw-alias-label-primary-inverted": (c) => c.onBrand ?? c.textInv,
   "--dsw-alias-label-secondary": "text2",
   "--dsw-alias-label-tertiary": "text3",
-  "--dsw-alias-markdown-citation": "brand",
+  "--dsw-alias-markdown-citation": "brandText",
   "--dsw-alias-markdown-code-block": "layer1",
   "--dsw-alias-markdown-code-block-banner": (c) => alpha(c.brand, 0.1),
   "--dsw-alias-markdown-code-segment-selected": (c) => alpha(c.brand, 0.16),
@@ -214,7 +216,7 @@ export const TOKEN_MAP = {
   "--dsw-alias-scrollbar-bg-l2": "layer3",
   "--dsw-alias-scrollbar-hover-l1": "text3",
   "--dsw-alias-scrollbar-hover-l2": "text2",
-  "--dsw-alias-state-business-primary": "biz",
+  "--dsw-alias-state-business-primary": "bizText",
   "--dsw-alias-state-business-tertiary": (c) => alpha(c.biz, 0.16),
   "--dsw-alias-state-error-primary": "error",
   "--dsw-alias-state-error-secondary": (c) => alpha(c.error, 0.14),
@@ -227,17 +229,21 @@ export const TOKEN_MAP = {
   "--dsw-alias-state-warn-tertiary": (c) => alpha(c.warn, 0.1),
   "--dsw-alias-toast-bg": (c) => alpha(c.overlay, 0.96),
   "--dsw-alias-tooltip-bg": (c) => alpha(c.overlay, 0.96),
-  "--dsw-specific-sidebar-fill": (c) => alpha(c.base, 0.55)
+  "--dsw-specific-sidebar-fill": (c) => alpha(c.base, c.mode === "dark" ? 0.62 : 0.74)
 };
 
 /** Build the {token: {light, dark}} override layer for one team. */
 export function makeTeamTokens(team) {
   const tokens = {};
+  const modes = {
+    light: { ...team.light, onBrand: team.onBrandLight ?? team.onBrand },
+    dark: { ...team.dark, onBrand: team.onBrandDark ?? team.onBrand }
+  };
   for (const name of ALL_TOKENS) {
     const spec = TOKEN_MAP[name];
     tokens[name] = {
-      light: resolveSpec(spec, team.light),
-      dark: resolveSpec(spec, team.dark)
+      light: resolveSpec(spec, modes.light),
+      dark: resolveSpec(spec, modes.dark)
     };
   }
   return tokens;
@@ -251,143 +257,58 @@ export function resolveSpec(spec, palette) {
 export const TEAMS = [
   {
     id: "redbull",
-    name: "Red Bull",
+    name: "Oracle Red Bull Racing",
+    position: "52% center",
+    mobilePosition: "58% center",
+    personality: "ATTACK MODE",
     cockpit: null,
-    onBrand: "#141A2E",
+    logo: null,
+    onBrandDark: "#141A2E",
+    onBrandLight: "#10131A",
     tint: "rgba(255, 200, 0, 0.14)",
-    dark: buildPalette({ base: "#10182E", brand: "#FFC800", biz: "#D90F0F" }, "dark"),
-    light: buildPalette({ base: "#F2F4FA", brand: "#B58A00", biz: "#A30D0D" }, "light")
+    dark: buildPalette({ base: "#10182E", brand: "#FFC800", brandText: "#FFD84A", biz: "#D90F0F", bizText: "#FF6262" }, "dark"),
+    light: buildPalette({ base: "#F2F4FA", brand: "#B58A00", brandText: "#765A00", biz: "#A30D0D", bizText: "#8F0B0B" }, "light")
   },
   {
     id: "ferrari",
-    name: "Ferrari",
+    name: "Scuderia Ferrari",
+    position: "48% center",
+    mobilePosition: "52% center",
+    personality: "SCUDERIA",
     cockpit: null,
-    onBrand: "#FFFFFF",
+    logo: null,
+    onBrandDark: "#FFFFFF",
+    onBrandLight: "#FFFFFF",
     tint: "rgba(220, 0, 0, 0.16)",
-    dark: buildPalette({ base: "#151113", brand: "#DC0000", biz: "#FFF200" }, "dark"),
-    light: buildPalette({ base: "#F9F6F5", brand: "#B00000", biz: "#B8A800" }, "light")
+    dark: buildPalette({ base: "#151113", brand: "#DC0000", brandText: "#FF6B6B", biz: "#FFF200", bizText: "#FFF45C" }, "dark"),
+    light: buildPalette({ base: "#F9F6F5", brand: "#B00000", brandText: "#980000", biz: "#B8A800", bizText: "#6F6600" }, "light")
   },
   {
     id: "mclaren",
-    name: "McLaren",
+    name: "McLaren Racing",
+    position: "52% center",
+    mobilePosition: "58% center",
+    personality: "PAPAYA",
     cockpit: null,
-    onBrand: "#FFFFFF",
+    logo: null,
+    onBrandDark: "#101218",
+    onBrandLight: "#101218",
     tint: "rgba(255, 128, 0, 0.15)",
-    dark: buildPalette({ base: "#141519", brand: "#FF8000", biz: "#47C7FC" }, "dark"),
-    light: buildPalette({ base: "#F6F6F7", brand: "#D96A00", biz: "#2E90C4" }, "light")
+    dark: buildPalette({ base: "#141519", brand: "#FF8000", brandText: "#FFA348", biz: "#47C7FC", bizText: "#76D5FF" }, "dark"),
+    light: buildPalette({ base: "#F6F6F7", brand: "#D96A00", brandText: "#9B4900", biz: "#2E90C4", bizText: "#236F96" }, "light")
   },
   {
     id: "mercedes",
-    name: "Mercedes",
+    name: "Mercedes-AMG Petronas Formula One Team",
+    position: "52% center",
+    mobilePosition: "58% center",
+    personality: "ENGINEERING",
     cockpit: null,
-    onBrand: "#FFFFFF",
+    logo: null,
+    onBrandDark: "#0A1012",
+    onBrandLight: "#0A1012",
     tint: "rgba(0, 210, 190, 0.14)",
-    dark: buildPalette({ base: "#101315", brand: "#00D2BE", biz: "#B4B5B7" }, "dark"),
-    light: buildPalette({ base: "#F4F6F6", brand: "#00918C", biz: "#8A8B8E" }, "light")
+    dark: buildPalette({ base: "#101315", brand: "#00D2BE", brandText: "#42E8D7", biz: "#B4B5B7", bizText: "#CED0D2" }, "dark"),
+    light: buildPalette({ base: "#F4F6F6", brand: "#00918C", brandText: "#006A66", biz: "#8A8B8E", bizText: "#626468" }, "light")
   }
 ];
-
-/** The skin's injected stylesheet. @import must be the very first rule. */
-export const F1_CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:wght@600;700;900&display=swap');
-
-/* ── cockpit backdrop: painted inside body's own background stack ──
-   (a negative-z-index overlay layer would sit UNDER body's background,
-   which the shell paints with --dsw-alias-bg-base — so the image lives
-   in the body background layers instead: tint → carbon weave → mild
-   vignette → cockpit image → base color).
-   The layout frame repaints --dsw-alias-bg-base full-viewport and would
-   double-dim the image; it is fully covered by the three columns, so we
-   drop its background and let each column carry its own single scrim. */
-html { background-color: #0B0B10; }
-html[data-f1-dark="false"] { background-color: #F4F5F8; }
-body {
-  background:
-    radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%),
-    repeating-linear-gradient(45deg, rgba(255,255,255,.014) 0 1px, transparent 1px 7px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,.01) 0 1px, transparent 1px 7px),
-    linear-gradient(to bottom, rgba(10,10,14,.2), rgba(10,10,14,.1) 30%, rgba(10,10,14,.16) 72%, rgba(10,10,14,.3)),
-    var(--f1-cockpit, none) center / cover no-repeat fixed,
-    var(--dsw-alias-bg-base, #0B0B10);
-}
-html[data-f1-dark="false"] body {
-  background:
-    radial-gradient(120% 80% at 50% 18%, var(--f1-tint, transparent) 0%, transparent 62%),
-    linear-gradient(to bottom, rgba(244,246,250,.2), rgba(244,246,250,.12) 30%, rgba(244,246,250,.18) 72%, rgba(244,246,250,.4)),
-    var(--f1-cockpit, none) center / cover no-repeat fixed,
-    var(--dsw-alias-bg-base, #F4F5F8);
-}
-/* version-tied selector (DSH web 0.1.1-rc.2 ui-layout): the full-viewport
-   frame background is redundant with the columns' own fills — removing it
-   lets the cockpit show through a single scrim instead of two. If this
-   selector stops matching after a DSH upgrade, the skin degrades to the
-   double-dimmed look instead of breaking. */
-.pI_x6G_frame {
-  background: transparent;
-}
-
-/* ── checkered-flag top strip ── */
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  z-index: 9998;
-  background: repeating-conic-gradient(#FFFFFF 0 25%, #0B0B10 0 50%) 0 0 / 14px 14px;
-  box-shadow: 0 1px 6px rgba(0,0,0,.45);
-  pointer-events: none;
-}
-
-/* ── racing typography ── */
-h1, h2, h3, h4, button {
-  font-family: 'Titillium Web', 'Arial Narrow', 'Helvetica Neue', sans-serif;
-}
-h1, h2, h3, h4 { letter-spacing: .015em; }
-
-/* ── team accent touches ── */
-::selection { background: var(--f1-accent, #FFC800); color: #0B0B10; }
-html[data-f1-dark="false"] ::selection { background: var(--f1-accent-light, #B58A00); color: #FFFFFF; }
-:focus-visible { outline: 2px solid var(--f1-accent, #FFC800); outline-offset: 2px; }
-a { text-decoration-color: var(--f1-accent, #FFC800); }
-
-/* ── pit-lane team switcher (right-edge rail) ── */
-#dsh-f1-rail {
-  position: fixed;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 12px 9px;
-  border-radius: 999px;
-  background: rgba(15,15,20,.55);
-  border: 1px solid rgba(255,255,255,.08);
-  box-shadow: 0 4px 16px rgba(0,0,0,.35);
-  backdrop-filter: blur(8px);
-}
-html[data-f1-dark="false"] #dsh-f1-rail {
-  background: rgba(255,255,255,.62);
-  border-color: rgba(0,0,0,.08);
-}
-#dsh-f1-rail .f1-dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: transform .15s ease, box-shadow .15s ease;
-}
-#dsh-f1-rail .f1-dot:hover { transform: scale(1.25); }
-#dsh-f1-rail .f1-dot.active {
-  box-shadow: 0 0 0 2px rgba(255,255,255,.85), 0 0 10px 2px var(--f1-accent, #FFC800);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #dsh-f1-rail .f1-dot { transition: none; }
-}
-`;

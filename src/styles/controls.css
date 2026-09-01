@@ -1,0 +1,133 @@
+/* Native settings.section content: every rule is plugin-scoped. */
+.dsh-f1-settings {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  gap: 18px;
+  padding: 4px 0 28px;
+  color: var(--dsw-alias-label-primary);
+  font-family: var(--f1-font-body);
+}
+.dsh-f1-settings__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--dsw-alias-border-l1);
+}
+.dsh-f1-settings__eyebrow {
+  color: var(--f1-accent-text);
+  font: 700 11px/1.2 var(--f1-font-display);
+  letter-spacing: .14em;
+}
+.dsh-f1-settings__title {
+  margin: 5px 0 0;
+  color: var(--dsw-alias-label-primary);
+  font: 800 24px/1 var(--f1-font-display);
+  letter-spacing: .03em;
+}
+.dsh-f1-settings__description {
+  max-width: 620px;
+  margin: 7px 0 0;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 13px;
+  line-height: 20px;
+}
+.dsh-f1-settings__status {
+  flex: none;
+  padding: 6px 9px;
+  border: 1px solid color-mix(in srgb, var(--f1-accent) 36%, var(--dsw-alias-border-l1));
+  color: var(--dsw-alias-label-secondary);
+  font: 700 11px/1 var(--f1-font-display);
+  letter-spacing: .08em;
+}
+.dsh-f1-settings__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.dsh-f1-team-card {
+  --team-color: var(--team-color-dark);
+  min-width: 0;
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--dsw-alias-border-l1);
+  border-radius: var(--f1-card-radius);
+  background: var(--dsw-alias-bg-layer-1);
+  color: var(--dsw-alias-label-primary);
+  text-align: left;
+  cursor: pointer;
+}
+html[data-f1-dark="false"] .dsh-f1-team-card { --team-color: var(--team-color-light); }
+.dsh-f1-team-card:hover,
+.dsh-f1-team-card:focus-visible { border-color: var(--team-color); }
+.dsh-f1-team-card[aria-pressed="true"] {
+  border-color: var(--team-color);
+  box-shadow: 0 0 0 1px var(--team-color), inset 0 -3px 0 var(--team-color);
+}
+.dsh-f1-team-card__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  background-position: var(--team-position, center);
+  background-size: cover;
+}
+.dsh-f1-team-card__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px 11px;
+}
+.dsh-f1-team-card__name {
+  display: block;
+  min-width: 0;
+  color: var(--dsw-alias-label-primary);
+  font: 750 13px/1.22 var(--f1-font-display);
+  letter-spacing: .015em;
+}
+.dsh-f1-team-card__mark {
+  width: 64px;
+  height: 28px;
+  border-radius: 3px;
+  background-color: #121722;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: calc(100% - 10px) calc(100% - 8px);
+  box-shadow: inset 3px 0 0 var(--team-color), 0 5px 12px rgba(0,0,0,.14);
+}
+.dsh-f1-settings__panel {
+  padding: 16px;
+  border: 1px solid var(--dsw-alias-border-l1);
+  border-radius: 8px;
+  background: var(--dsw-alias-bg-layer-1);
+}
+.dsh-f1-settings__panel-title {
+  margin: 0 0 3px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.dsh-f1-settings__panel-hint {
+  margin: 0 0 13px;
+  color: var(--dsw-alias-label-secondary);
+  font-size: 12px;
+  line-height: 18px;
+}
+.dsh-f1-setting {
+  display: grid;
+  grid-template-columns: minmax(108px, 1fr) minmax(150px, 240px) 48px;
+  align-items: center;
+  gap: 14px;
+  min-height: 40px;
+  border-top: 1px solid var(--dsw-alias-border-l2);
+}
+.dsh-f1-setting:first-of-type { border-top: 0; }
+.dsh-f1-setting__label { font-size: 13px; }
+.dsh-f1-setting input[type="range"] { width: 100%; accent-color: var(--f1-accent); }
+.dsh-f1-setting input[type="checkbox"] { justify-self: end; accent-color: var(--f1-accent); }
+.dsh-f1-setting output {
+  color: var(--dsw-alias-label-secondary);
+  text-align: right;
+  font: 700 12px/1 var(--f1-font-display);
+}
