@@ -72,8 +72,12 @@ test("settings remains above the composer and all four teams are operable", asyn
   test.skip(testInfo.project.name === "compact", "The compact host layout intentionally collapses the settings rail.");
 
   // A fresh DSH profile opens its host onboarding layer above the workspace.
-  // Dismiss it as a user would before exercising the persistent settings rail.
-  await page.keyboard.press("Escape");
+  // Dismiss it by clicking the backdrop, matching the host's pointer workflow.
+  const hostMask = page.locator('[role="presentation"] > [aria-hidden="true"]:visible').first();
+  if (await hostMask.count()) {
+    await hostMask.click({ position: { x: 4, y: 4 } });
+    await expect(hostMask).toBeHidden();
+  }
 
   const settingsEntry = page.getByText("设置", { exact: true }).last();
   await expect(settingsEntry).toBeVisible();
