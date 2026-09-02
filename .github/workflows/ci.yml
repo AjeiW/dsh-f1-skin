@@ -41,9 +41,11 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npx playwright install --with-deps chromium
       - name: Install pinned DSH test host
+        timeout-minutes: 5
         run: |
           npm install --global pnpm@10.15.0
-          npm install --prefix "$RUNNER_TEMP/dsh-runner" @deepseek-ai/dsh@0.1.1-rc.2
+          mkdir -p "$RUNNER_TEMP/dsh-runner"
+          pnpm add --dir "$RUNNER_TEMP/dsh-runner" --save-exact --ignore-scripts --reporter=append-only @deepseek-ai/dsh@0.1.1-rc.2
           node "$RUNNER_TEMP/dsh-runner/node_modules/@deepseek-ai/dsh/lib/bin.js" plugin --profile web add "link:$GITHUB_WORKSPACE"
       - name: Start DSH Web
         run: |
