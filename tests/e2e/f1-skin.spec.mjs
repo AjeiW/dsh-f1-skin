@@ -68,7 +68,13 @@ for (const [id, name] of teams) {
   });
 }
 
-test("settings remains above the composer and all four teams are operable", async ({ page }) => {
+test("settings remains above the composer and all four teams are operable", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name === "compact", "The compact host layout intentionally collapses the settings rail.");
+
+  // A fresh DSH profile opens its host onboarding layer above the workspace.
+  // Dismiss it as a user would before exercising the persistent settings rail.
+  await page.keyboard.press("Escape");
+
   const settingsEntry = page.getByText("设置", { exact: true }).last();
   await expect(settingsEntry).toBeVisible();
   await settingsEntry.click();
