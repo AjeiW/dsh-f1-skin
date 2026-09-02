@@ -58,15 +58,33 @@
 
 ## 安装
 
-### 方式一：npm（首个公开版本发布后推荐）
+### 0. 先安装 DSH CLI
 
-```bash
+本皮肤是 DSH Web 的插件，不能脱离 DSH 单独运行。请先安装 Node.js 20 或更高
+版本，再全局安装与本皮肤兼容的 DSH CLI：
+
+```powershell
+npm install -g @deepseek-ai/dsh@0.1.1-rc.2
+dsh --version
+```
+
+版本检查应输出 `0.1.1-rc.2`。如果 PowerShell 报错
+`无法将“dsh”项识别为 cmdlet、函数、脚本文件或可运行程序的名称`，说明 CLI
+尚未安装成功或 npm 全局目录不在 `PATH` 中。安装后请重新打开 PowerShell；仍然
+无法识别时，运行 `npm config get prefix`，并把输出的目录加入用户 `PATH`。
+
+> 如果 PowerShell 提示脚本执行策略禁止运行 `dsh.ps1`，可将下文命令中的
+> `dsh` 临时改为 `dsh.cmd`。
+
+### 方式一：npm（推荐）
+
+```powershell
 dsh plugin --profile web add dsh-f1-skin
 ```
 
 ### 方式二：GitHub 仓库
 
-```bash
+```powershell
 dsh plugin --profile web add github:frank-fan-818/dsh-f1-skin
 ```
 
@@ -74,7 +92,7 @@ dsh plugin --profile web add github:frank-fan-818/dsh-f1-skin
 
 ### 方式三：下载源码 / ZIP 后本地链接
 
-```bash
+```powershell
 # 在解压后的仓库目录执行
 dsh plugin --profile web add link:.
 # Windows 且路径含空格时，dsh 转发器会拆词，改用 pnpm 直装 + 手动 reconcile：
