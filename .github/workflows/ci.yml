@@ -30,7 +30,7 @@ jobs:
     name: DSH browser regression
     runs-on: ubuntu-latest
     env:
-      DSH_HOME: ${{ runner.temp }}/dsh-home
+      DSH_HOME: ${{ github.workspace }}/.ci-dsh-home
       DSH_URL: http://127.0.0.1:3080
     steps:
       - uses: actions/checkout@v6
